@@ -139,16 +139,29 @@ const setVehicleCount = async (req, res) => {
   const { id } = req.params;
   const { count } = req.body;
 
+  if (count < 0) {
+    res.status(404).json({ message: "This value can't be negative" });
+  }
+
   try {
     const vehicle = await Vehicle.findByPk(id, {
       attributes: ["id", "name", "model", "count"],
     });
 
-    vehicle.count = count;
+    if (
+      (vehicle.count === 0 && count < 0) ||
+      (count < 0 && count * -1 > vehicle.count)
+    ) {
+      res.status(400).json({
+        message: "The amount of vehicles can't be negative",
+      });
+    } else {
+      vehicle.count = count;
 
-    await vehicle.save({ fields: ["count"] });
+      await vehicle.save({ fields: ["count"] });
 
-    res.status(200).json(vehicle);
+      res.status(200).json(vehicle);
+    }
   } catch (err) {
     const error = new Error("This Vehicle doesn't exist");
     res.status(404).json({ msg: error.message });
@@ -168,15 +181,16 @@ const incrementVehicleCount = async (req, res) => {
       (vehicle.count === 0 && count < 0) ||
       (count < 0 && count * -1 > vehicle.count)
     ) {
-      res.status(200).json({
+      res.status(400).json({
         message: "The amount of vehicles can't be negative",
       });
     } else {
       const incrementResult = await vehicle.increment("count", { by: count });
       await vehicle.save({ fields: ["count"] });
-      res.status(200).json({
-        message: `${vehicle.name}'s inventory has been updated successfully!`,
+      const vehicleUpdated = await Vehicle.findByPk(id, {
+        attributes: ["id", "name", "count"],
       });
+      res.status(200).json(vehicleUpdated);
     }
   } catch (error) {
     res.status(400).json(error);
