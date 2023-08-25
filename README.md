@@ -30,6 +30,13 @@ npm install
 ```
 
 ### Step 2
+Migrate the database. We need to run the migrations to create the database a tables that our app needs to work.
+
+```
+npx sequelize-cli db:migrate
+```
+
+### Step 3
 Create an .env file in the root folder and paste this code:
 
 ```
@@ -41,7 +48,7 @@ The FRONT_END_URL  is url where we are going to run the client side app, therefo
 As with the url, you can change for any of your preference, if the API finds your port is being used, it is going to use the 4000 by default.
 
 
-### Step 3
+### Step 4
 Run the server app (API):
 
 ```
@@ -49,7 +56,7 @@ npm run dev
 ```
 
 
-### Step 4
+### Step 5
 Time to run react app. First, install all the needed dependencies.
 Go to the opened terminal in the react app and run the following commands:
 
@@ -57,7 +64,7 @@ Go to the opened terminal in the react app and run the following commands:
 npm install
 ```
 
-### Step 5
+### Step 6
 Create an .env file in the root folder and paste this code:
 
 ```
@@ -67,7 +74,7 @@ VITE_BACKEND_URL="http://localhost:3000"
 As you can imagine this url of our server and the react app needs it to consume the info.
 You can modify this file setting API url that you finally decided to use.
 
-### Step 6
+### Step 7
 Run the app with the following command:
 
 ```
