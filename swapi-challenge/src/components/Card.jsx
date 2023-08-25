@@ -1,33 +1,53 @@
 import { useState } from "react";
-import { setAircraftCount, updateAircraftCount } from "../utils";
+import { updateAircraftCount } from "../utils";
 
-const Card = ({ aircraft }) => {
+const Card = ({ aircraft, route }) => {
   const { id, name, model, count } = aircraft;
   const [counter, setCounter] = useState(0);
   const [inventory, setInventory] = useState(count);
   const [errorMsg, setErrorMsg] = useState("");
-  let path = `/vehicles/${id}`;
+  let path = `/${route}/${id}`;
 
   const handleSet = async () => {
     try {
-      const newInventory = await setAircraftCount(path, Number(counter));
+      const newInventory = await updateAircraftCount(
+        path,
+        Number(counter),
+        "post"
+      );
       setInventory(newInventory);
       setCounter(0);
     } catch (error) {
       setErrorMsg(error.data.message);
     }
+
+    setTimeout(() => {
+      setErrorMsg("");
+    }, 5000);
   };
 
   const handleUpdateCount = async () => {
-    const newInventory = await updateAircraftCount(path, Number(counter));
-    setInventory(newInventory);
-    setCounter(0);
+    try {
+      const newInventory = await updateAircraftCount(
+        path,
+        Number(counter),
+        "put"
+      );
+      setInventory(newInventory);
+      setCounter(0);
+    } catch (error) {
+      setErrorMsg(error.data.message);
+    }
+
+    setTimeout(() => {
+      setErrorMsg("");
+    }, 5000);
   };
 
   return (
     <>
       <div className="border-4 border-black rounded-2xl my-7 drop-shadow-lg flex flex-col justify-between items-center w-3/6 p-7 gap-5">
-        <p className="w-11/12 text-xl font-semibold ">{`Vehicle ${name}, model ${model} has an inventory of ${
+        <p className="w-11/12 text-xl font-semibold ">{`${name}, model ${model} has an inventory of ${
           inventory === null ? counter : inventory
         }`}</p>
         <div className="w-11/12 flex items-center justify-center gap-5">
@@ -47,7 +67,10 @@ const Card = ({ aircraft }) => {
           </div>
           <button
             onClick={handleUpdateCount}
-            className="rounded-md text-white font-semibold p-2 uppercase bg-cyan-300 w-5/6"
+            disabled={inventory === null ? true : false}
+            className={`${
+              inventory === null ? "bg-cyan-200" : "bg-cyan-600"
+            } rounded-md text-white font-semibold p-2 uppercase w-5/6`}
           >
             increment/decrement
           </button>

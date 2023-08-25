@@ -180,9 +180,10 @@ const incrementStarShipCount = async (req, res) => {
     } else {
       const incrementResult = await starShip.increment("count", { by: count });
       await starShip.save({ fields: ["count"] });
-      res.status(200).json({
-        message: `${starShip.name}'s inventory has been updated successfully!`,
+      const starshipUpdated = await Starship.findByPk(id, {
+        attributes: ["id", "name", "count"],
       });
+      res.status(200).json(starshipUpdated);
     }
   } catch (error) {
     res.status(400).json(error);
