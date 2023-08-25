@@ -1,7 +1,10 @@
 # swapi challenge by Lucas DG
 
 ## Usage
-
+The app is quite easy to use. The home ("/") is the vehicles page, there you will see all the vehicles fetched from the API which has filled the database with the star-wars-api info.
+You can navigate between the vehicles and the starships page with the navbar. Both pages share the same functionallity. The vehicles and starships are listed as a list of cards. Each card has the name of the aircraft, its model and the each's one inventory. Also a number input to select the amount of vehicles or starships in inventory. You can modify the amount by
+either setting it with the "set" button or increment/decrement it with the "increment/decrement" button. Note that at the begining, as no aircraft has an inventory by default, the "increment/decrement" button of each aircraft card stays disabled until you set the inventory for first time with the set button. Once done it, the button becomes available to increment
+and decrement the aircraft inventory as much as you like. 
 
 # Instructions for running this project
 
